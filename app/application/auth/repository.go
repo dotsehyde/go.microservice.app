@@ -2,7 +2,6 @@ package auth
 
 import (
 	"errors"
-	"log/slog"
 	"sample/app/adapters/gateways"
 	"sample/app/domain/model"
 	"sample/app/domain/requestdto"
@@ -12,7 +11,7 @@ type repo struct {
 }
 
 func NewAuthRepo() gateways.AuthRepo {
-	return &NewRepo{}
+	return &repo{}
 }
 
 var data = []model.User{}
@@ -31,20 +30,6 @@ func (r *repo) Get(req requestdto.LoginRequest) (model.User, error) {
 	return model.User{}, errors.New("user not found")
 }
 
-type NewRepo struct {
-}
-
-func (r *NewRepo) Save(user model.User) (model.User, error) {
-	slog.Info("NewRepo Save")
-	return user, nil
-}
-
-func (r *NewRepo) Get(req requestdto.LoginRequest) (model.User, error) {
-	slog.Info("NewRepo Get")
-	return model.User{}, errors.New("user not found")
-}
-
-func (r *NewRepo) GetAll() ([]model.User, error) {
-	slog.Info("NewRepo GetAll")
+func (r *repo) GetAll() ([]model.User, error) {
 	return data, nil
 }
