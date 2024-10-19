@@ -1,0 +1,89 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      target: dev
+    restart: "always"
+    volumes:
+      - ./backend:/app
+      - ./backend/storage:/app/storage
+      - ./backend/secrets:/app/secrets
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - db
+    networks:
+      - "locagri.network"
+    command: >
+      sh -c "mkdir -p /app/secrets/rsa && \ if [ ! -f /app/secrets/rsa/token_rsa ] && [ ! -f /app/secrets/rsa/token_rsa.pub ]; then \
+        openssl genpkey -algorithm RSA -out /app/secrets/rsa/token_rsa -pkeyopt rsa_keygen_bits:2048 && \
+        openssl rsa -pubout -in /app/secrets/rsa/token_rsa -out /app/secrets/rsa/token_rsa.pub; \
+      fi && \ exec air"
+  worker:
+    build:
+      context: ./worker
+      target: dev
+    restart: "always"
+    volumes:
+      - ./worker:/app
+    env_file:
+      - ./worker/.env
+    networks:
+      - "locagri.network"
+  db:
+    image: mysql:9.0.1
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: RootPass0Pass
+    volumes:
+      - ./scripts/db:/docker-entrypoint-initdb.d/:rw
+      - ./scripts/mysql.cnf:/etc/mysql/conf.d/my.cnf:ro
+      - ./mnt/mysql:/var/lib/mysql
+    networks:
+      - "locagri.network"
+  phpmyadmin:
+    image: elestio/phpmyadmin:5.2.1.1
+    restart: always
+    ports:
+      - "10000:80"
+    environment:
+      - PMA_HOST=db
+    depends_on:
+      - db
+      - webserver
+    networks:
+      - "locagri.network"
+  rabbitmq:
+    image: rabbitmq:3.12.6
+    restart: always
+    volumes:
+      - ./mnt/rabbitmq:/var/lib/rabbitmq/
+    networks:
+      - "locagri.network"
+  redis:
+    image: redis:7.2.1
+    restart: always
+    volumes:
+      - ./mnt/redis:/data
+    networks:
+      - "locagri.network"
+  webserver:
+    image: nginx:latest
+    restart: unless-stopped
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8000:80"
+    depends_on:
+      - backend
+    networks:
+      - "locagri.network"
+networks:
+  locagri.network:
+volumes:
+  mysql:
+  redis:
+  rabbitmq:
+  storage:
+  secrets:
+  nginx:

@@ -1,0 +1,6 @@
+./secrets
+./storage
+.env
+cmd/tmp/main
+secrets/*
+storage/*

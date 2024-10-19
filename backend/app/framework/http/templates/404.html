@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Not Found</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Handlee&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100&display=swap");
+  
+      html {
+        font-family: "Poppins", sans-serif;
+        font-size: 1rem;
+        box-sizing: border-box;
+        *{
+          padding: 0;
+          margin: 0;
+        }
+      }
+  
+      body {
+        background-color: rgb(229 231 235/1);
+      }
+      .main__content {
+        position: relative;
+        width: 100%;
+        height: calc(100vh - 5rem);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+  
+      .main__footer {
+        width: 100%;
+        height: 5rem;
+        text-align: center;
+        font-size: .7rem;
+        color: #717173ac;
+      }
+  
+      .main__footer>p {
+        margin: 0;
+      }
+  
+      .main__btn {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem 0;
+      }
+  
+      .btn {
+        font-size: .8rem !important;
+        text-align: center;
+        line-height: 1;
+        background-color: #5967ff;
+        color: white;
+        width: 9rem;
+        padding: .8rem;
+        display: block;
+        transition: all .2s ease-in;
+        border-radius: 5px;
+      }
+  
+      .btn:not(:last-child) {
+        margin-right: 1rem;
+      }
+  
+      .btn:hover {
+        background-color: rgba(87, 101, 255, 0.682);
+      }
+  
+      .btn.link {
+        text-decoration: none;
+        display: inline-block;
+      }
+  
+    </style>
+</head>
+<body>
+    
+
+<main class="main">
+  <section class="main__content">
+    <div><h1>404 - Page Not Found</h1></div>
+    <div class="main__btn">
+      <a href="{{.url}}" target="_blank" class="btn link">Visit BookiRide</a>
+    </div>
+  </section>
+  <footer class="main__footer">
+    <span>&copy; BookiHub <span id="year"></span></span>
+    <p>Your Journey, Our Responsibility.</p>
+  </footer>
+</main>
+
+<script>
+  document.getElementById("year").innerText = (new Date()).getUTCFullYear()
+</script>
+</body>
+</html>
